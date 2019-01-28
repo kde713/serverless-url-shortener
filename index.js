@@ -15,12 +15,10 @@ app.post('/register.json', function (req, res) {
   const originUrl = req.query.url
   const hashedUrl = getHash(originUrl)
 
-  dynamoDb.getItem({
+  dynamoDb.get({
     TableName: TABLE_NAME,
     Key: {
-      "hashCode": {
-        S: hashedUrl
-      }
+      hashCode: hashedUrl
     }
   }, (error, result) => {
     if (result.Item) {
@@ -32,18 +30,12 @@ app.post('/register.json', function (req, res) {
         })
       })
     } else {
-      dynamoDb.putItem({
+      dynamoDb.put({
         TableName: TABLE_NAME,
         Item: {
-          "hashCode": {
-            S: hashedUrl
-          },
-          "originUrl": {
-            S: originUrl
-          },
-          "viewCount": {
-            N: 0
-          }
+          hashCode: hashedUrl,
+          originUrl: originUrl,
+          viewCount: 0
         }
       }, (error, result) => {
         res.status(201).json({
