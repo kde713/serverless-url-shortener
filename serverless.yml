@@ -35,13 +35,9 @@ resources:
         AttributeDefinitions:
           - AttributeName: hashCode
             AttributeType: S
-          - AttributeName: originUrl
-            AttributeType: S
         KeySchema:
           - AttributeName: hashCode
             KeyType: HASH
-          - AttributeName: originUrl
-            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
