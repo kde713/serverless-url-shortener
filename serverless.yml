@@ -18,7 +18,7 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource:
-        - { "FN::GetAtt": ["AppDynamoDBTable", "Arn"] }
+        - { "Fn::GetAtt": ["AppDynamoDBTable", "Arn"] }
 
 functions:
   app:
@@ -37,9 +37,12 @@ resources:
             AttributeType: S
           - AttributeName: originUrl
             AttributeType: S
-          - AttributeName: lastVisit
-            AttributeType: N
         KeySchema:
           - AttributeName: hashCode
             KeyType: HASH
+          - AttributeName: originUrl
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
         TableName: ${self:custom.tableName}
