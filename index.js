@@ -35,7 +35,7 @@ app.post('/register.json', function (req, res) {
         Item: {
           hashCode: hashedUrl,
           originUrl: originUrl,
-          viewCount: 0
+          lastVisit: 0
         }
       }, (error, result) => {
         res.status(201).json({
