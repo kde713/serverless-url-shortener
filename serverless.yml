@@ -1,8 +1,5 @@
 service: serverless-url-shortener
 
-custom:
-  tableName: 'url-shortener'
-
 provider:
   name: aws
   runtime: nodejs8.10
@@ -18,7 +15,15 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource:
-        - { "Fn::GetAtt": ["AppDynamoDBTable", "Arn"] }
+        - { "Fn::GetAtt": ["UrlManageTable", "Arn"] }
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeStream
+        - dynamodb:GetRecords
+        - dynamodb:GetShardIterator
+        - dynamodb:ListStreams
+      Resource:
+        - { "Fn::GetAtt": ["UrlManageTable", "Arn"] }
 
 functions:
   app:
@@ -27,11 +32,13 @@ functions:
       - http: ANY /
       - http: 'ANY {proxy+}'
 
+
 resources:
   Resources:
-    AppDynamoDBTable:
+    UrlManageTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
+        TableName: url-shortener-urlmap
         AttributeDefinitions:
           - AttributeName: hashCode
             AttributeType: S
@@ -41,4 +48,5 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: ${self:custom.tableName}
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE

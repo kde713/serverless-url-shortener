@@ -8,7 +8,7 @@ const app = express()
 
 const utils = require('./utils.js')
 
-const TABLE_NAME = 'url-shortener'
+const TABLE_NAME = 'url-shortener-urlmap'
 const dynamoDb = new AWS.DynamoDB.DocumentClient()
 
 app.post('/register.json', function (req, res) {
