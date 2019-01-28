@@ -42,7 +42,7 @@ app.post('/register.json', function (req, res) {
           url: url.format({
             protocol: req.protocol,
             host: req.get('host'),
-            pathname: `/${hashedUrl}`
+            pathname: `${req.baseUrl}/${hashedUrl}`
           })
         })
       })
