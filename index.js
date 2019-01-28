@@ -74,7 +74,7 @@ app.get('/:hashCode', function (req, res) {
         res.redirect(301, originUrl)
       })
     } else {
-      res.status(404)
+      res.status(404).send("Not Found")
     }
   })
 })
