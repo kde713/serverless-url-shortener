@@ -1,0 +1,11 @@
+{
+  "name": "serverless-url-shortener",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Dongeon Kim",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.4",
+    "serverless-http": "^1.9.0"
+  }
+}
