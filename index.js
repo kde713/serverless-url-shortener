@@ -6,14 +6,14 @@ const AWS = require('aws-sdk')
 
 const app = express()
 
-import { getHash } from './utils'
+const utils = require('./utils.js')
 
 const TABLE_NAME = 'url-shortener'
 const dynamoDb = new AWS.DynamoDB.DocumentClient()
 
 app.post('/register.json', function (req, res) {
   const originUrl = req.query.url
-  const hashedUrl = getHash(originUrl)
+  const hashedUrl = utils.getHash(originUrl)
 
   dynamoDb.get({
     TableName: TABLE_NAME,
