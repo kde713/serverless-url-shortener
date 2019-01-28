@@ -52,7 +52,31 @@ app.post('/register.json', function (req, res) {
 
 app.get('/:hashCode', function (req, res) {
   const hashCode = req.params.hashCode
-  res.send(hashCode)
+
+  dynamoDb.get({
+    TableName: TABLE_NAME,
+    Key: {
+      hashCode: hashCode
+    }
+  }, (error, result) => {
+    if (result.Item) {
+      const originUrl = result.Item.originUrl
+      dynamoDb.update({
+        TableName: TABLE_NAME,
+        Key: {
+          hashCode: hashCode
+        },
+        UpdateExpression: 'set lastVisit = :now',
+        ExpressionAttributeValues: {
+          ':now': Math.round((new Date()).getTime() / 1000)
+        }
+      }, (error, result) => {
+        res.redirect(301, originUrl)
+      })
+    } else {
+      res.status(404)
+    }
+  })
 })
 
 app.get('/:hashCode/stats', function (req, res) {
