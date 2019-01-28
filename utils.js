@@ -188,6 +188,8 @@ const md5 = function (str) {
   }
 }()
 
-export const getHash = function (originString) {
+const getHash = function (originString) {
   return md5(originString)
 }
+
+module.exports = { getHash }
