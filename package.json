@@ -5,6 +5,7 @@
   "author": "Dongeon Kim",
   "license": "MIT",
   "dependencies": {
+    "aws-sdk": "^2.395.0",
     "express": "^4.16.4",
     "serverless-http": "^1.9.0"
   }
