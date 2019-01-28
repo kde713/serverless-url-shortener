@@ -16,6 +16,7 @@ provider:
         - dynamodb:DeleteItem
       Resource:
         - { "Fn::GetAtt": ["UrlManageTable", "Arn"] }
+        - { "Fn::GetAtt": ["StatsManageTable", "Arn"] }
     - Effect: Allow
       Action:
         - dynamodb:DescribeStream
@@ -27,11 +28,17 @@ provider:
 
 functions:
   app:
-    handler: index.handler
+    handler: app.handler
     events:
       - http: ANY /
       - http: 'ANY {proxy+}'
-
+  statbot:
+    handler: statbot.handler
+    events:
+      - stream:
+          type: dynamodb
+          arn:
+            Fn::GetAtt: [ UrlManageTable, StreamArn ]
 
 resources:
   Resources:
@@ -50,3 +57,16 @@ resources:
           WriteCapacityUnits: 1
         StreamSpecification:
           StreamViewType: NEW_IMAGE
+    StatsManageTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: url-shortener-stats
+        AttributeDefinitions:
+          - AttributeName: hashCode
+            AttributeType: S
+        KeySchema:
+          - AttributeName: hashCode
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
